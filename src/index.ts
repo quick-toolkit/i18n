@@ -20,13 +20,16 @@
  * SOFTWARE.
  */
 
-import merge from 'lodash.merge'
+import merge from 'lodash.merge';
 import { Exception } from './exception';
 
 export type DepPartial<T> = {
   [P in keyof T]?: DepPartial<T[P]>;
 };
 
+/**
+ * @class I18n<object>
+ */
 export class I18n<T extends object> {
   private _locales = new Map<string, DepPartial<T>>();
 
@@ -38,9 +41,9 @@ export class I18n<T extends object> {
    * 构造函数
    * @param defaultLocale 默认语言配置
    */
-  public constructor(public defaultLocale: BaseLocale & T) {
+  public constructor(private defaultLocale: BaseLocale & T) {
     if (!defaultLocale.code) {
-        throw new Exception('locale code cannot be empty!');
+      throw new Exception('locale code cannot be empty!');
     }
     this.default = defaultLocale.code;
     this.current = defaultLocale.code;
@@ -64,10 +67,10 @@ export class I18n<T extends object> {
    * @param code
    */
   public locale(code: string): void;
-  public locale(code?: string): string | void{
+  public locale(code?: string): string | void {
     if (code) {
       if (!this._locales.has(code)) {
-        throw new Exception(`Not defined locale ${code}!`)
+        throw new Exception(`Not defined locale ${code}!`);
       }
       this.current = code;
     }
@@ -103,6 +106,6 @@ export interface BaseLocale {
   label: string;
 }
 
-export { Exception }
+export { Exception };
 
 export default I18n;
