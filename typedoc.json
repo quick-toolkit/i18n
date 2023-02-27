@@ -1,0 +1,6 @@
+{
+  "entryPoints": ["./src/index.ts"],
+  "name": "I18n API",
+  "hideGenerator": true,
+  "includeVersion": true
+}
