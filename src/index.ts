@@ -81,8 +81,8 @@ export class I18n<T extends object> {
   /**
    * 获取当前语言配置
    */
-  public localeData(): BaseLocale & T {
-    const currentData = this._locales.get(this.current) || {};
+  public localeData(code?: string): BaseLocale & T {
+    const currentData = this._locales.get(code || this.current) || {};
     return merge({}, this.defaultLocale, currentData);
   }
 
@@ -90,6 +90,13 @@ export class I18n<T extends object> {
    * 已定义语言列表
    */
   public locales() {
+    return Array.from(this._locales.values());
+  }
+
+  /**
+   * 已定义语言code列表
+   */
+  public localeCodes() {
     return Array.from(this._locales.keys());
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@quick-toolkit/i18n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The i18n module is used to support internationalization.",
   "main": "dist/cjs",
   "types": "dist/types",
