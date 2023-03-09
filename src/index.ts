@@ -54,8 +54,8 @@ export class I18n<T extends object> {
    * 定义语言
    * @param locale
    */
-  public defined(locale: BaseLocale & DepPartial<T>) {
-    return this._locales.set(locale.code, locale);
+  public defined(locale: BaseLocale & DepPartial<T>): void {
+    this._locales.set(locale.code, locale);
   }
 
   /**
@@ -67,6 +67,10 @@ export class I18n<T extends object> {
    * @param code
    */
   public locale(code: string): void;
+  /**
+   * 实现方法
+   * @param code
+   */
   public locale(code?: string): string | void {
     if (code) {
       if (!this._locales.has(code)) {
@@ -87,16 +91,32 @@ export class I18n<T extends object> {
   }
 
   /**
+   * 根据key获取locale Data
+   * @param callback
+   */
+  public getLocaleDataByKey<K extends string, V = any>(
+    callback: (data: BaseLocale & T) => V
+  ): Record<K, V> {
+    const record: Record<string, V> = {};
+    this.locales().forEach((locale) => {
+      record[locale.code] = callback(locale);
+    });
+    return record;
+  }
+
+  /**
    * 已定义语言列表
    */
-  public locales() {
-    return Array.from(this._locales.values());
+  public locales(): Array<BaseLocale & T> {
+    return Array.from(this._locales.keys()).map((code) =>
+      this.localeData(code)
+    );
   }
 
   /**
    * 已定义语言code列表
    */
-  public localeCodes() {
+  public localeCodes(): string[] {
     return Array.from(this._locales.keys());
   }
 }
