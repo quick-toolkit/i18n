@@ -24,7 +24,7 @@ import merge from 'lodash.merge';
 import { Exception } from './exception';
 
 export type DepPartial<T> = {
-  [P in keyof T]?: DepPartial<T[P]>;
+  [P in keyof T]?: T[P] extends object ? DepPartial<T[P]> : T[P];
 };
 
 /**
@@ -55,7 +55,7 @@ export class I18n<T extends object> {
    * @param locale
    */
   public defined(locale: BaseLocale & DepPartial<T>): void {
-    this._locales.set(locale.code, locale);
+    this._locales.set(locale.code, merge({}, this.defaultLocale, locale));
   }
 
   /**
@@ -86,8 +86,10 @@ export class I18n<T extends object> {
    * 获取当前语言配置
    */
   public localeData(code?: string): BaseLocale & T {
-    const currentData = this._locales.get(code || this.current) || {};
-    return merge({}, this.defaultLocale, currentData);
+    return (
+      (this._locales.get(code || this.current) as BaseLocale & T) ||
+      this.defaultLocale
+    );
   }
 
   /**
